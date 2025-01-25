@@ -1,3 +1,5 @@
+# Running Jobs in Docker Container
+```yml
 name: Use Docker in Github-Action
 
 on: [workflow_dispatch]
@@ -26,3 +28,87 @@ jobs:
           cat /etc/os-release
       - name: Log Env
         run: echo $API_URL
+```
+
+# Runing steps in docker container
+```yml
+jobs:
+  docker-job:
+    runs-on: ubuntu-latest
+    container:
+      image: node:20.3-alpine3.17
+      # credentials:
+      #   username:
+      #   password:
+      env:
+        API_URL: some-url.com
+      ports:
+        - 80
+      # volumes:
+      #   - vol_name:/path/in/container
+      #   - /path/to/container
+      #   - /path/in/host:/path/in/container
+      # options: --cpus 1
+    steps:
+      - name: Log Node & OS Versions
+        run: |
+          node -v
+          cat /etc/os-release
+      - name: Log Env
+        run: echo $API_URL
+      - name: Container in a Step
+        uses: docker://node:18.16-alpine3.17
+        with:
+          entrypoint: /usr/local/bin/node
+          args: -p 2+3
+      - name: Log node version
+        uses: docker://node:18.16-alpine3.17
+        with:
+          args: -v
+```
+# Shared volume and network
+```yml
+name: Docker
+on: [workflow_dispatch]
+
+jobs:
+  docker-job:
+    runs-on: ubuntu-latest
+    container:
+      image: node:20.3-alpine3.17
+      # credentials:
+      #   username:
+      #   password:
+      env:
+        API_URL: some-url.com
+      ports:
+        - 80
+      # volumes:
+      #   - vol_name:/path/in/container
+      #   - /path/to/container
+      #   - /path/in/host:/path/in/container
+      # options: --cpus 1
+    steps:
+      - name: Log Node & OS Versions
+        run: |
+          node -v
+          cat /etc/os-release
+      - name: Log Env
+        run: echo $API_URL
+      - name: Create a file
+        run: echo 'Some text' > text.txt
+      - name: Container in a Step
+        uses: docker://node:18.16-alpine3.17
+        with:
+          entrypoint: /usr/local/bin/node
+          args: -p 2+3
+      - name: Log node version
+        uses: docker://node:18.16-alpine3.17
+        with:
+          args: -v
+      - name: Show file contents
+        uses: docker://node:18.16-alpine3.17
+        with:
+          entrypoint: cat
+          args: text.txt
+```
