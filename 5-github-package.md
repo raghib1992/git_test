@@ -80,7 +80,10 @@ Let's trying running it.
 ⌨️ Activity: Run your image
 Find your image information by typing docker image ls. screenshot of output from Docker image ls command: lists docker images, REPOSITORY TAG and docker URL
 Use the following command to run a container from your image:
+```
 docker run -dp 8080:80 --rm <YOUR_IMAGE_NAME:TAG>
+docker run -dp 8080:80 --rm ghcr.io/raghib1992/publish-packages/game:sha-6059e33
+```
 Replace YOUR_IMAGE_NAME with your image name under the REPOSITORY column.
 Replace TAG with the image tag under the TAG column.
 Press Enter.
