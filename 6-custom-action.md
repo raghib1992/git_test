@@ -110,3 +110,46 @@ branding:
   icon: 'shield'  
   color: 'blue'
 ```
+
+
+# Workflow commands
+Workflow commands allow you to communicate with the GitHub Actions runner machine by printing formatted lines of text to the console. You can use these workflow commands with shell commands or within your custom actions. Workflow commands are useful because they let you share information between workflow steps, print debug or error messages to the console, set environment variables, set output parameters, or add to the system path.
+
+Most workflow commands use the echo command in the following specific format, while others can be invoked by writing to a file:
+
+Bash
+
+Copy
+echo "::workflow-command parameter1={data},parameter2={data}::{command value}"
+Following are some basic message-logging examples for printing a debug message, info message, error message, or warning message to the console:
+
+yml
+
+Copy
+- name: workflow commands logging messages
+  run: |
+    echo "::debug::This is a debug message"
+    echo "This is an info message"
+    echo "::error::This is an error message"
+    echo "::warning::This is a warning message"
+You can also create a message to print to the log with a filename (file), line number (line), and column (col) number where the error occurred. Warning messages appear in a yellow highlight with the text "warning," and error messages appear in a red highlight with the text "error."
+
+Bash
+
+Copy
+echo "::error file=app.js,line=10,col=15::Something went wrong"
+It's important to note that these workflow commands need to be on a single line. Characters that interfere with parsing, such as commas and line breaks, will need to be URL-encoded.
+
+For example, the following text is a multi-line message:
+
+yml
+
+Copy
+This text spans
+across multiple lines
+This message should be encoded as shown here:
+
+yml
+
+Copy
+This text spans%0Aacross multiple lines  
